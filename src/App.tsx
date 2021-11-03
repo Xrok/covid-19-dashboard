@@ -1,29 +1,31 @@
-import React from "react";
-import logo from "./logo.svg";
+import { useState } from "react";
 import "./App.css";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider, VStack } from "@chakra-ui/react";
+import Header from "./Header";
+import Content from "./Content";
+import CustomDrawer from "./CustomDrawer";
+import { Comunas, ComunasContext } from "./data/comunas";
+import { ComunaType } from "./types/Comuna.type";
 
 function App() {
+  const [comunas, setComunas] = useState(Comunas);
+
+  const updateComunas = (comunas: ComunaType[]) => {
+    setComunas([...comunas]);
+  };
+
   return (
     <ChakraProvider>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <ComunasContext.Provider value={{ comunas, updateComunas }}>
+        <Box w="100%">
+          <CustomDrawer></CustomDrawer>
+          <VStack>
+            <Header />
+            <Content></Content>
+          </VStack>
+        </Box>
+      </ComunasContext.Provider>
     </ChakraProvider>
   );
 }
-
 export default App;
