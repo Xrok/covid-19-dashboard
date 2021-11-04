@@ -7,8 +7,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Comunas, ComunasContext } from "../data/comunas";
-import { comunaUpdater } from "../utils/comunaUpdater";
+import { Comunas, ComunasContext } from "../context/comunas";
+import { comunaSelectedUpdater, comunaUpdater } from "../utils/comunaUpdater";
 import ComunaCard from "./ComunaCard";
 
 function CustomSearch() {
@@ -28,21 +28,34 @@ function CustomSearch() {
       </InputGroup>
       <VStack>
         <ComunasContext.Consumer>
-          {({ comunas, updateComunas }) => {
-            return comunas
+          {({ data, updateData }) => {
+            return data.comunas
               .filter((comuna) => {
                 return comuna.name.toLowerCase().includes(search.toLowerCase());
               })
               .map((comuna) => {
                 const updater = () => {
-                  const comunasUpdated = comunaUpdater(comuna, comunas);
-                  updateComunas(comunasUpdated);
+                  const comunasUpdated = comunaUpdater(
+                    comuna,
+                    data.comunas,
+                    data.selectedComuna
+                  );
+                  updateData(comunasUpdated);
+                };
+                const updaterSelected = () => {
+                  const comunasUpdated = comunaSelectedUpdater(
+                    comuna,
+                    data.comunas,
+                    data.selectedComuna
+                  );
+                  updateData(comunasUpdated);
                 };
                 return (
                   <ComunaCard
                     key={comuna.name}
                     data={comuna}
                     updater={updater}
+                    updaterSelected={updaterSelected}
                   ></ComunaCard>
                 );
               });

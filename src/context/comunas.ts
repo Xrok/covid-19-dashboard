@@ -9,6 +9,12 @@ export const Comunas = [
 ];
 
 export const ComunasContext = React.createContext({
-  comunas: Comunas,
-  updateComunas: (comunas: ComunaType[]) => {},
+  data: { comunas: Comunas, selectedComuna: Comunas[0] },
+  updateData: ({
+    comunas,
+    selectedComuna,
+  }: {
+    comunas: ComunaType[];
+    selectedComuna: ComunaType;
+  }) => {},
 });

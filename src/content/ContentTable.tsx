@@ -8,9 +8,10 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { ComunaData } from "../types/Comuna.type";
 import { dataEneroMock } from "../utils/dataMock";
 
-function ContentTable() {
+function ContentTable({ data }: { data: ComunaData }) {
   return (
     <Table variant="simple">
       <TableCaption>Contagiados de Covid-19 por Comuna en el mes </TableCaption>
@@ -22,12 +23,12 @@ function ContentTable() {
         </Tr>
       </Thead>
       <Tbody>
-        {Object.entries(dataEneroMock).map((entry) => {
+        {data.values.map((entry) => {
           return (
-            <Tr key={entry[0]}>
-              <Td>{entry[0]}</Td>
-              <Td isNumeric>{entry[1]}</Td>
-              <Td> {((entry[1] / 247552) * 100).toFixed(2)}</Td>
+            <Tr key={entry.date}>
+              <Td>{entry.date}</Td>
+              <Td isNumeric>{entry.quantity}</Td>
+              <Td> {((entry.quantity / data.poblacion) * 100).toFixed(2)}</Td>
             </Tr>
           );
         })}

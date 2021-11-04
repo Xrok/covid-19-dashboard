@@ -1,8 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { Chart, registerables } from "chart.js";
 import { useEffect } from "react";
+import { ComunaData } from "../types/Comuna.type";
 
-function ContentGraphic() {
+function ContentGraphic({ data }: { data: ComunaData }) {
   useEffect(() => {
     Chart.register(...registerables);
     const canvas = document.getElementById("myChart") as HTMLCanvasElement;
@@ -11,25 +12,16 @@ function ContentGraphic() {
     const myChart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: [
-          "01",
-          "03",
-          "06",
-          "08",
-          "10",
-          "13",
-          "15",
-          "17",
-          "20",
-          "24",
-          "27",
-        ],
+        labels: data.values.map((entry) => {
+          return entry.date.slice(-2);
+        }),
         datasets: [
           {
             label: "# Contagios",
-            data: [6, 12, 41, 63, 87, 115, 124, 134, 166, 224, 270],
+            data: data.values.map((entry) => {
+              return entry.quantity;
+            }),
             backgroundColor: "rgba(255, 99, 132, 0.2)",
-
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
           },
@@ -46,7 +38,7 @@ function ContentGraphic() {
     return () => {
       myChart.destroy();
     };
-  }, []);
+  }, [data]);
 
   return (
     <Box>
